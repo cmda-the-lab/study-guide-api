@@ -1,0 +1,34 @@
+{
+  "name": "study-guide-api",
+  "version": "1.0.0",
+  "description": "An API that serves the study guide's data and allows the scraper to write data to our database",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmda-the-lab/study-guide-api.git"
+  },
+  "keywords": [
+    "api",
+    "json",
+    "education"
+  ],
+  "author": "Laurens",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmda-the-lab/study-guide-api/issues"
+  },
+  "homepage": "https://github.com/cmda-the-lab/study-guide-api#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "nodemon index.js"
+  }
+}
