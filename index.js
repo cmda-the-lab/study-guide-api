@@ -10,31 +10,34 @@ express()
   .get('/faculty/:id', getFaculty)
   .get('/program', getPrograms)
   .get('/program/:id', getProgram)
+  .get('/person', getPersons)
+  .get('/person/:id', getPerson)
+  .get('/course', getCourses)
+  .get('/person/:id', getCourse)
   .listen(8000)
 
-//TODO: make this reusable async just like the getRecord function
-function  getFaculties(req,res){
+async function  getFaculties(req,res){
 	let route = req.url
-	let faculties = []
-	fs.readdir(db+route, (err, files) => {
-	  files.forEach(file => {
-	  	let faculty = { id: file}
-	    faculties.push(faculty)
-	  })
-	  res.send(faculties)
-	})	
+	result = await getRecords(route)
+	res.send(result)
 }
 
-function  getPrograms(req,res){
+async function  getPrograms(req,res){
 	let route = req.url
-	let programs = []
-	fs.readdir(db+route, (err, files) => {
-	  files.forEach(file => {
-	  	let program = { id: file}
-	    programs.push(program)
-	  })
-	  res.send(programs)
-	})	
+	result = await getRecords(route)
+	res.send(result)
+}
+
+async function  getCourses(req,res){
+	let route = req.url
+	result = await getRecords(route)
+	res.send(result)
+}
+
+async function  getPersons(req,res){
+	let route = req.url
+	result = await getRecords(route)
+	res.send(result)
 }
 
 async function  getFaculty(req,res){
@@ -51,12 +54,40 @@ async function  getProgram(req,res){
 	res.send(result)
 }
 
-function getRecord(table, encoding = "utf8"){
+async function  getCourse(req,res){
+	let route = req.url
+	console.log("someone requested /course:id", route)
+	result = await getRecord(route)
+	res.send(result)
+}
+
+async function  getPerson(req,res){
+	let route = req.url
+	console.log("someone requested /person:id", route)
+	result = await getRecord(route)
+	res.send(result)
+}
+
+//Returns the contents of a record
+function getRecord(record, encoding = "utf8"){
 	return new Promise( (resolve,reject) => {
-		console.log(db,table)
-		fs.readFile(path.join(db, table+".json"), encoding, function(err,data) {
+		fs.readFile(path.join(db, record+".json"), encoding, function(err,data) {
 		if (err) throw err;
 		resolve (JSON.parse(data));
+		})
+	})
+}
+
+//Returns matching record names
+function getRecords(table){
+	return new Promise( (resolve,reject) => {
+		let results = []
+		fs.readdir(db+table, (err, files) => {
+		  files.forEach(file => {
+		  	let result = { id: file}
+		    results.push(result)
+		  })
+		  resolve(results)
 		})
 	})
 }
