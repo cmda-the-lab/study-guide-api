@@ -84,6 +84,10 @@ function getRecords(table){
 		let results = []
 		fs.readdir(db+table, (err, files) => {
 		  files.forEach(file => {
+		  	console.log(db+table+file.replace(".json",""))
+		  	// let temp = table+file.replace(".json","")
+		  	// let result = getRecord(temp)
+
 		  	let result = { id: file}
 		    results.push(result)
 		  })
