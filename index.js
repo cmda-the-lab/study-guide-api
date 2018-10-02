@@ -1,17 +1,30 @@
+//Require necessary packages
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
 const mongoose = require('mongoose')
-require('dotenv').config()
+require('dotenv').config()	//Configure .env so all env vars are loaded
 
-
+//Get dburl from .env
 const mongooseURL = process.env.MONGO_DB_URL
-//const db = 'static'
 
+//Connect to and configure database connection
 mongoose.connect(mongooseURL, { useNewUrlParser: true })
 mongoose.Promise = global.Promise
 const db = mongoose.connection
+const Person = require('./models/person')
 
+const laurens = new Person({ id: '1', name: 'Laurens A' })
+console.log(laurens.name)
+
+laurens.save(function (err, person) {
+	if (err) return console.error(err)
+	console.log("Person: ",person)
+})
+
+
+//Set up express and routes
+//TODO: Move routes to proper router
 express()
   .use(express.static('static'))
   .get('/faculty', getFaculties)
@@ -24,6 +37,7 @@ express()
   .get('/course/:id', getCourse)
   .listen(8000)
 
+//Some async route functions that get data from the db
 async function  getFaculties(req,res){
 	let route = req.url
 	result = await getRecords(route)
@@ -103,6 +117,8 @@ function getRecords(table){
 		})
 	})
 }
+
+//Listeners on the database
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 db.once('open', function() {
   console.log("Connected to db")
