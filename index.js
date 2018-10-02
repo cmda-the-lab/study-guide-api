@@ -1,8 +1,16 @@
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
+const mongoose = require('mongoose')
+require('dotenv').config()
 
-const db = 'static'
+
+const mongooseURL = process.env.MONGO_DB_URL
+//const db = 'static'
+
+mongoose.connect(mongooseURL, { useNewUrlParser: true })
+mongoose.Promise = global.Promise
+const db = mongoose.connection
 
 express()
   .use(express.static('static'))
@@ -13,7 +21,7 @@ express()
   .get('/person', getPersons)
   .get('/person/:id', getPerson)
   .get('/course', getCourses)
-  .get('/person/:id', getCourse)
+  .get('/course/:id', getCourse)
   .listen(8000)
 
 async function  getFaculties(req,res){
@@ -95,3 +103,7 @@ function getRecords(table){
 		})
 	})
 }
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+db.once('open', function() {
+  console.log("Connected to db")
+})

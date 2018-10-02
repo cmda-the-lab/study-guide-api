@@ -4,7 +4,8 @@
   "description": "An API that serves the study guide's data and allows the scraper to write data to our database",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "start": "node index.js",
+    "test": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -22,13 +23,11 @@
   },
   "homepage": "https://github.com/cmda-the-lab/study-guide-api#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "mongoose": "^5.3.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.4"
-  },
-  "scripts": {
-    "start": "node index.js",
-    "test": "nodemon index.js"
   }
 }
