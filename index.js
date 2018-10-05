@@ -5,6 +5,9 @@ const path = require('path')
 const mongoose = require('mongoose')
 require('dotenv').config()	//Configure .env so all env vars are loaded
 
+const testSchemas = require('./test-schemas')
+console.log(testSchemas)
+console.log(testSchemas.person())
 //Get dburl from .env
 const mongooseURL = process.env.MONGO_DB_URL
 
@@ -12,16 +15,6 @@ const mongooseURL = process.env.MONGO_DB_URL
 mongoose.connect(mongooseURL, { useNewUrlParser: true })
 mongoose.Promise = global.Promise
 const db = mongoose.connection
-const Person = require('./models/person')
-
-const laurens = new Person({ id: '1', name: 'Laurens A' })
-console.log(laurens.name)
-
-laurens.save(function (err, person) {
-	if (err) return console.error(err)
-	console.log("Person: ",person)
-})
-
 
 //Set up express and routes
 //TODO: Move routes to proper router
