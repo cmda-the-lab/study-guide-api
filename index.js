@@ -5,9 +5,11 @@ const path = require('path')
 const mongoose = require('mongoose')
 require('dotenv').config()	//Configure .env so all env vars are loaded
 
+const Person = require('./models/person')
+const Course = require('./models/course')
 const testSchemas = require('./test-schemas')
-console.log(testSchemas)
-//console.log(testSchemas.course())
+const pers = testSchemas.person()
+//console.log(testSchemas.course(pers))
 //Get dburl from .env
 const mongooseURL = process.env.MONGO_DB_URL
 
@@ -70,16 +72,17 @@ async function  getProgram(req,res){
 }
 
 async function  getCourse(req,res){
-	let route = req.url
-	console.log("someone requested /course:id", route)
-	result = await getRecord(route)
+	let id = req.params.id
+	console.log("someone requested /course:id", id)
+	result = await Course.find({id:id})
 	res.send(result)
 }
 
 async function  getPerson(req,res){
 	let route = req.url
-	console.log("someone requested /person:id", route)
-	result = await getRecord(route)
+	let id = req.params.id
+	console.log("someone requested /person:id", id)
+	result = await Person.find({id:id})
 	res.send(result)
 }
 

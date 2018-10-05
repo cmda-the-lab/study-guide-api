@@ -4,15 +4,13 @@ const Course = require('./models/course')
 // Use this: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose#Book_model
 const testSchemas = {
 	person(){
-	  	const laurens = new Person({ id: '1', name: 'Laurens A' })
+	  	const laurens = new Person({ id: 'aarnl', name: 'Laurens A' })
 		console.log(laurens.name)
 
-		laurens.save(function (err, person) {
-			if (err) return console.error(err)
-			return person
-		})
+		laurens.save().then(person => this.course(person))
 	  },
-	course(){
+	course(person){
+		console.log("person:", person)
 		const designEthics = new Course(
 	  	{
 		id: "257651",
@@ -26,15 +24,15 @@ const testSchemas = {
 		start: null,
 		end: null,
 	  	languages: ["nl"],
-		coordinators: "[1]",
+		coordinators: [person._id],
 		coordinatorsSummary: "awesome",
-		teachers: [1],
+		teachers: [person._id],
 		teachersSummary: "awesometeachers",
 		competencies: [],
 		competenciesSummary: "research",
 		objectivesSummary: "Objective! Over ruled!",
-		program: "",
-		faculty: ""
+		program: person._id,
+		faculty: person._id
 		})
 		console.log(designEthics.coordinators)
 		designEthics.save(function (err, course) {
