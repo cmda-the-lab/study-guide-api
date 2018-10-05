@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 //Name is a normal string. Enforcing it to be an i18literal can be done through a method
 //description is a normal string.
 //indicators references the indicators in this Competency. We coul nest

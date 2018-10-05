@@ -1,4 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
 //In the typescript data model a lot of fields are described as I18NRoot[]'s
 // As that structure is too complex to have in the db we've opted here for Strings
 // These will prob be htmlstrings that we'll break back into elements clientside 

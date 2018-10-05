@@ -7,7 +7,7 @@ require('dotenv').config()	//Configure .env so all env vars are loaded
 
 const testSchemas = require('./test-schemas')
 console.log(testSchemas)
-console.log(testSchemas.person())
+//console.log(testSchemas.course())
 //Get dburl from .env
 const mongooseURL = process.env.MONGO_DB_URL
 
