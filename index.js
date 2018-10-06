@@ -5,11 +5,14 @@ const path = require('path')
 const mongoose = require('mongoose')
 require('dotenv').config()	//Configure .env so all env vars are loaded
 
+
 const Person = require('./models/person')
 const Course = require('./models/course')
 const testSchemas = require('./test-schemas')
-const pers = testSchemas.person()
-//console.log(testSchemas.course(pers))
+//Run the next line to test the db schemas
+testSchemas.init()
+
+
 //Get dburl from .env
 const mongooseURL = process.env.MONGO_DB_URL
 
