@@ -30,7 +30,7 @@ const testSchemas = {
 		//console.log(db.persons)
 		await this.course(db)
 		db.courses = await Course.find()
-		console.log(db.courses)
+		//console.log(db.courses)
 	},
 	async faculty(){
 		let faculty = await Faculty.findOne()

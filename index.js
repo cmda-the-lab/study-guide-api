@@ -5,13 +5,15 @@ const path = require('path')
 const mongoose = require('mongoose')
 require('dotenv').config()	//Configure .env so all env vars are loaded
 
-
-const Person = require('./models/person')
+const Faculty = require('./models/faculty')
+const Program = require('./models/program')
 const Course = require('./models/course')
+const Competency = require('./models/competency')
+const Indicator = require('./models/indicator')
+const Person = require('./models/person')
 const testSchemas = require('./test-schemas')
 //Run the next line to test the db schemas
 testSchemas.init()
-
 
 //Get dburl from .env
 const mongooseURL = process.env.MONGO_DB_URL
@@ -37,84 +39,51 @@ express()
 
 //Some async route functions that get data from the db
 async function  getFaculties(req,res){
-	let route = req.url
-	result = await getRecords(route)
+	const result = await Faculty.find()
 	res.send(result)
 }
 
 async function  getPrograms(req,res){
-	let route = req.url
-	result = await getRecords(route)
+	const result = await Program.find()
 	res.send(result)
 }
 
 async function  getCourses(req,res){
-	let route = req.url
-	result = await getRecords(route)
+	const result = await Course.find()
 	res.send(result)
 }
 
 async function  getPersons(req,res){
-	let route = req.url
-	result = await getRecords(route)
+	const result = await Person.find()
 	res.send(result)
 }
 
 async function  getFaculty(req,res){
-	let route = req.url
-	console.log("someone requested /faculty:id", route)
-	result = await getRecord(route)
+	let id = req.params.id
+	console.log("someone requested /faculty:id", id)
+	const result = await Faculty.find({id})
 	res.send(result)
 }
 
 async function  getProgram(req,res){
-	let route = req.url
-	console.log("someone requested /program:id", route)
-	result = await getRecord(route)
+	let id = req.params.id
+	console.log("someone requested /program:id", id)
+	const result = await Program.find({id})
 	res.send(result)
 }
 
 async function  getCourse(req,res){
 	let id = req.params.id
-	console.log("someone requested /course:id", id)
-	result = await Course.find({id:id})
+	console.log("someone requested /Course:id", id)
+	const result = await Course.find({id})
 	res.send(result)
 }
 
 async function  getPerson(req,res){
-	let route = req.url
 	let id = req.params.id
-	console.log("someone requested /person:id", id)
-	result = await Person.find({id:id})
+	console.log("someone requested /Person:id", id)
+	const result = await Person.find({id})
 	res.send(result)
-}
-
-//Returns the contents of a record
-function getRecord(record, encoding = "utf8"){
-	return new Promise( (resolve,reject) => {
-		fs.readFile(path.join(db, record+".json"), encoding, function(err,data) {
-		if (err) throw err;
-		resolve (JSON.parse(data));
-		})
-	})
-}
-
-//Returns matching record names
-function getRecords(table){
-	return new Promise( (resolve,reject) => {
-		let results = []
-		fs.readdir(db+table, (err, files) => {
-		  files.forEach(file => {
-		  	console.log(db+table+file.replace(".json",""))
-		  	// let temp = table+file.replace(".json","")
-		  	// let result = getRecord(temp)
-
-		  	let result = { id: file}
-		    results.push(result)
-		  })
-		  resolve(results)
-		})
-	})
 }
 
 //Listeners on the database
