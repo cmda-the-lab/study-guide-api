@@ -43,6 +43,9 @@ typings/
 # Optional npm cache directory
 .npm
 
+# Optional jshint settings
+.jshintrc
+
 # Optional eslint cache
 .eslintcache
 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-//Name is a normal string. Enforcing it to be an i18literal can be done through a method
+//Name is an array of ibjects which can hold the different languages
 //description is a normal string.
 //Competency references the corresponding competency for this indicator. We coul nest
 // indicators in competencies.
@@ -9,7 +9,7 @@ const IndicatorSchema = mongoose.Schema({
     type: String
   },
   name: {
-    type: String
+    type: [{}]
   },
   description: {
     type: String

@@ -1,6 +1,9 @@
 const Faculty = require('./models/faculty')
-const Person = require('./models/person')
+const Program = require('./models/program')
 const Course = require('./models/course')
+const Competency = require('./models/competency')
+const Indicator = require('./models/indicator')
+const Person = require('./models/person')
 //This fails, I think the syntax is wrong for the type defs in the schemas
 // Use this: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose#Book_model
 const testSchemas = {
@@ -13,8 +16,15 @@ const testSchemas = {
 		// would wait on Faculty.find()
 		await this.faculty()
 		db.faculty = await Faculty.findOne()
+		//console.log("faculty:", db.faculty)
+		await this.program()
+		db.program = await Program.findOne()
+		await this.competency(db)
+		db.competencies = await Competency.find()
+		await this.indicator(db)
+		db.indicators = await Indicator.find()
 		//Fill it with a person if there isn't one already
-		console.log(db.faculty)
+		//console.log(db.faculty)
 		await this.person()
 		db.persons = await Person.find()
 		//console.log(db.persons)
@@ -27,26 +37,35 @@ const testSchemas = {
 		if (faculty) return faculty
 
 		const fdmci = new Faculty(
-		{"id": "fdmci",
-  		"name": [
-    		{"language": "nl", "value": "Digitale Media en Creatieve Industrie"},
-    		{"language": "en", "value": "Digital Media and Creative Industry"}
-  		]
+		{
+			"id": "fdmci",
+  			"name": [
+    			{"language": "nl", "value": "Digitale Media en Creatieve Industrie"},
+    			{"language": "en", "value": "Digital Media and Creative Industry"}
+  			]
   		})
   		console.log("New faculty created with id:",fdmci.id)
   		await fdmci.save()
-		return Faculty.findOne()
+		return
 	},
-	async person(){
-	  	let person = await Person.findOne()
-		if (person) return person
+	async program(){
+		let program = await Program.findOne()
+		if (program) return program
 
-	  	const laurens = new Person({ id: 'aarnl', name: 'Laurens A' })
-		await laurens.save()
-		console.log("New Person created with name:",laurens.name)
-		return Person.find()
-
-	  },
+		const cmd = new Program(
+		{
+		  "id": "cmd-vt",
+		  "name": [
+		    {"language": "nl", "value" : "Communicatie en Multimedia Design"},
+		    {"language": "en", "value" :"Communcation and Multimedia Design"}
+		  ],
+		  competencies: [],
+		  faculty: db.faculty
+		})
+  		console.log("New program created with id:", cmd.id)
+  		await cmd.save()
+		return
+	},
 	async course(db){
 		let course = await Course.findOne()
 		if (course) return course
@@ -67,10 +86,11 @@ const testSchemas = {
 		coordinatorsSummary: "awesome",
 		teachers: db.persons[0],
 		teachersSummary: "awesometeachers",
-		competencies: [],
+		competencies: db.competencies,
 		competenciesSummary: "research",
+		indicators: db.indicators[0],
 		objectivesSummary: "Objective! Over ruled!",
-		program: db.persons[0],
+		program: db.program,
 		faculty: db.faculty
 		})
 		//console.log(designEthics.coordinators)
@@ -79,7 +99,53 @@ const testSchemas = {
 			return course
 		})
 		console.log("New Course created with desc:",designEthics.description)
-		return Course.findOne()
+		return
+	},
+	async competency(db){
+		let competency = await Competency.findOne()
+		if (competency) return competency
+
+		const evalueren = new Competency(
+		{
+		  "id": "4",
+		  "name": [
+		    {"language": "nl", "value": "Evalueren"},
+		    {"language": "en", "value": "Evaluation"}
+		  ],
+		  "description":"",
+		  "indicators": [],
+		  "programs": db.program  
+		})
+  		console.log("New competency created with id:", evalueren.id)
+  		await evalueren.save()
+		return
+	},
+	async indicator(db){
+		let indicator = await Indicator.findOne()
+		if (indicator) return indicator
+		const fourA = new Indicator(
+		{
+		  "id": "4a",
+		  "name": [
+		    {"language": "nl", "value": "Een CMD’er is kritisch op het eigen werk met als doel dit te verbeteren en zoekt actief naar feedback."},
+		    {"language": "en", "value": "A CMD’er is self-critical to be able to improve their work and actively look for feedback."}
+		  ],
+		  "description": "Een CMD’er is kritisch op het eigen werk met als doel dit te verbeteren en zoekt actief naar feedback.",
+		  competency: db.competencies[0],
+		  program: db.program
+		})
+  		console.log("New indicator created with id:", fourA.id)
+  		await fourA.save()
+		return
+	},
+	async person(){
+	  	let person = await Person.findOne()
+		if (person) return person
+
+	  	const laurens = new Person({ id: 'aarnl', name: 'Laurens A' })
+		await laurens.save()
+		console.log("New Person created with name:",laurens.name)
+		return
 	}
 }
 module.exports = testSchemas;

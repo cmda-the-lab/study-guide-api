@@ -9,7 +9,7 @@ const ProgramSchema = mongoose.Schema({
     type: String
   },
   name: {
-    type: String
+    type: [{}]
   },
   courses: {
     type: [Schema.Types.ObjectId]
