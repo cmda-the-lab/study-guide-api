@@ -109,7 +109,9 @@ async function postCourses(req, res) {
   console.log(typeof courses)
   Course.insertMany(courses, function(error, docs) {
       if (error) {
-        console.error('Insert into db failed', error);
+        console.error('Insert into db failed', error)
+        res.status(406)
+        res.send(error)
       }
       else {
         res.status(200)

@@ -7,7 +7,8 @@ const Schema = mongoose.Schema
 // I've added the field indicators to the model!!!
 const CourseSchema = mongoose.Schema({
   id: {
-    type: String
+    type: String,
+    required: true
   },
   name: {
     type: [{}]
