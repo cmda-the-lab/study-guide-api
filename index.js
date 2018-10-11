@@ -4,6 +4,7 @@ const { promisify } = require("util")
 const path = require("path")
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
+const debug = require('debug')('API')
 require("dotenv").config() //Configure .env so all env vars are loaded
 
 const Faculty = require("./models/faculty")
@@ -14,7 +15,7 @@ const Indicator = require("./models/indicator")
 const Person = require("./models/person")
 const testSchemas = require("./test-schemas")
 //Run the next line to test the db schemas
-testSchemas.init()
+//testSchemas.init()
 
 //Get dburl from .env
 const mongooseURL = process.env.MONGO_DB_URL
@@ -60,7 +61,7 @@ function postFaculties(req, res) {
   let docs = JSON.parse(req.body.faculties)
   Faculty.insertMany(docs, function(error, docs) {
     if (error) {
-      console.error("Insert into db failed", error)
+      debug("Insert into db failed", error)
       res.status(406)
       res.send(error)
     } else {
@@ -179,5 +180,5 @@ async function getCourseTeachers(req, res) {
 //Listeners on the database
 db.on("error", console.error.bind(console, "MongoDB connection error:"))
 db.once("open", function() {
-  console.log("Connected to db")
+  debug('Connected to database');
 })
