@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "nodemon index.js",
-    "pretty": "prettier --no-semi --print-width 180 --write *.js",
+    "pretty": "prettier --no-semi --print-width 180 --write **/*.js",
     "dexpress": "DEBUG=express*,API npm start",
     "dbug": "DEBUG=API npm start"
   },

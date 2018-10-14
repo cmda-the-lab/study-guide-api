@@ -4,8 +4,10 @@ const { promisify } = require("util")
 const path = require("path")
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
-const debug = require('debug')('API')
+const debug = require("debug")("API")
 require("dotenv").config() //Configure .env so all env vars are loaded
+
+mongoose.set("debug", Boolean(process.env.DEBUG))
 
 const Faculty = require("./models/faculty")
 const Program = require("./models/program")
@@ -14,6 +16,7 @@ const Competency = require("./models/competency")
 const Indicator = require("./models/indicator")
 const Person = require("./models/person")
 const testSchemas = require("./test-schemas")
+
 //Run the next line to test the db schemas
 //testSchemas.init()
 
@@ -173,12 +176,12 @@ async function getCourseTeachers(req, res) {
   console.log("teachers for this course: ", course.teachers)
   const teacherIds = course.teachers.map(teacher => mongoose.Types.ObjectId(teacher))
   console.log(teacherIds)
-  const result = await Person.find({_id: { $in: teacherIds} })
+  const result = await Person.find({ _id: { $in: teacherIds } })
   res.send(result)
 }
 
 //Listeners on the database
 db.on("error", console.error.bind(console, "MongoDB connection error:"))
 db.once("open", function() {
-  debug('Connected to database');
+  debug("Connected to database")
 })

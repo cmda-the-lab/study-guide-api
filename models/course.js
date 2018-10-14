@@ -1,26 +1,35 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 //In the typescript data model a lot of fields are described as I18NRoot[]'s
 // As that structure is too complex to have in the db we've opted here for Strings
-// These will prob be htmlstrings that we'll break back into elements clientside 
+// These will prob be htmlstrings that we'll break back into elements clientside
 // I've added the field indicators to the model!!!
 const CourseSchema = mongoose.Schema({
   id: {
     type: String,
     required: true
   },
+  sisId: {
+    type: String
+  },
   name: {
     type: [{}]
   },
   description: {
-    type: String
+    type: [{}]
   },
-  year: {
-  	type: String
+  years: {
+    type: [String]
+  },
+  learningYears: {
+    type: [String]
+  },
+  periods: {
+    type: [String]
   },
   credits: {
-  	type: Number
+    type: Number
   },
   start: {
     type: String
@@ -29,31 +38,37 @@ const CourseSchema = mongoose.Schema({
     type: String
   },
   languages: {
-    type: [String]
+    type: [{ type: String, enum: ["en", "nl"] }]
+  },
+  methods: {
+    type: [{ type: String, enum: ["practicum", "lecture", "lab", "coaching"] }]
+  },
+  methodsSummary: {
+    type: [{}]
   },
   coordinators: {
     type: [Schema.Types.ObjectId]
   },
   coordinatorsSummary: {
-    type: String
+    type: [{}]
   },
   teachers: {
     type: [Schema.Types.ObjectId]
   },
   teachersSummary: {
-    type: String
+    type: [{}]
   },
   competencies: {
     type: [Schema.Types.ObjectId]
   },
-  competenciesSummary: {
-    type: String
-  },
   indicators: {
     type: [Schema.Types.ObjectId]
   },
+  indicatorSummary: {
+    type: [{}]
+  },
   objectivesSummary: {
-    type: String
+    type: [{}]
   },
   program: {
     type: Schema.Types.ObjectId
@@ -61,5 +76,5 @@ const CourseSchema = mongoose.Schema({
   faculty: {
     type: Schema.Types.ObjectId
   }
-});
-const Course = module.exports = mongoose.model('Course', CourseSchema);
+})
+const Course = (module.exports = mongoose.model("Course", CourseSchema))
