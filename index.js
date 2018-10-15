@@ -52,6 +52,12 @@ app
   .post("/course", postCourses)
   .get("/course/:id", getCourse)
   .get("/course/:id/teachers", getCourseTeachers)
+  .get("/indicator", getIndicators)
+  .post("/indicator", postIndicators)
+  .get("/indicator/:id", getIndicator)
+  .get("/competency", getCompetencies)
+  .post("/competency", postCompetencies)
+  .get("/competency/:id", getCompetency)
   .listen(8000)
 
 //Some async route functions that get data from the db
@@ -112,6 +118,44 @@ function postCourses(req, res) {
   })
 }
 
+async function getIndicators(req, res) {
+  const result = await Indicator.find()
+  res.send(result)
+}
+
+function postIndicators(req, res) {
+  let docs = JSON.parse(req.body.indicators)
+  Indicator.insertMany(docs, function(error, docs) {
+    if (error) {
+      console.error("Insert into db failed", error)
+      res.status(406)
+      res.send(error)
+    } else {
+      res.status(200)
+      res.send(docs.length + " docs succesfully inserted into db")
+    }
+  })
+}
+
+async function getCompetencies(req, res) {
+  const result = await Competency.find()
+  res.send(result)
+}
+
+function postCompetencies(req, res) {
+  let docs = JSON.parse(req.body.competencies)
+  Competency.insertMany(docs, function(error, docs) {
+    if (error) {
+      console.error("Insert into db failed", error)
+      res.status(406)
+      res.send(error)
+    } else {
+      res.status(200)
+      res.send(docs.length + " docs succesfully inserted into db")
+    }
+  })
+}
+
 async function getPersons(req, res) {
   const result = await Person.find()
   res.send(result)
@@ -159,10 +203,31 @@ async function getCourse(req, res) {
 }
 
 async function getPerson(req, res) {
-  let id = req.params.id
-  console.log("someone requested /Person:id", id)
+  let _id = req.params.id
+
+  console.log("someone requested /Person:id", _id)
   const result = await Person.find({
-    id
+    _id
+  })
+  res.send(result)
+}
+
+async function getIndicator(req, res) {
+  let _id = req.params.id
+
+  console.log("someone requested /Indicator:id", _id)
+  const result = await Indicator.find({
+    _id
+  })
+  res.send(result)
+}
+
+async function getCompetency(req, res) {
+  let _id = req.params.id
+
+  console.log("someone requested /Competency:id", _id)
+  const result = await Competency.find({
+    _id
   })
   res.send(result)
 }
