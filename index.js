@@ -39,6 +39,7 @@ const app = express()
 app
   .use(express.static("static"))
   .use(bodyParser.urlencoded({ extended: true }))
+  .use(bodyParser.json())
   .get("/faculty", getFaculties)
   .post("/faculty", postFaculties)
   .get("/faculty/:id", getFaculty)
@@ -67,8 +68,7 @@ async function getFaculties(req, res) {
 }
 
 function postFaculties(req, res) {
-  let docs = JSON.parse(req.body.faculties)
-  Faculty.insertMany(docs, function(error, docs) {
+  Faculty.insertMany(req.body, function(error, docs) {
     if (error) {
       debug("Insert into db failed", error)
       res.status(406)
@@ -86,8 +86,7 @@ async function getPrograms(req, res) {
 }
 
 function postPrograms(req, res) {
-  let docs = JSON.parse(req.body.programs)
-  Program.insertMany(docs, function(error, docs) {
+  Program.insertMany(req.body, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -105,8 +104,7 @@ async function getCourses(req, res) {
 }
 
 function postCourses(req, res) {
-  let docs = JSON.parse(req.body.courses)
-  Course.insertMany(docs, function(error, docs) {
+  Course.insertMany(req.body, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -124,8 +122,7 @@ async function getIndicators(req, res) {
 }
 
 function postIndicators(req, res) {
-  let docs = JSON.parse(req.body.indicators)
-  Indicator.insertMany(docs, function(error, docs) {
+  Indicator.insertMany(req.body, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -143,8 +140,7 @@ async function getCompetencies(req, res) {
 }
 
 function postCompetencies(req, res) {
-  let docs = JSON.parse(req.body.competencies)
-  Competency.insertMany(docs, function(error, docs) {
+  Competency.insertMany(req.body, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -162,8 +158,7 @@ async function getPersons(req, res) {
 }
 
 function postPersons(req, res) {
-  let docs = JSON.parse(req.body.persons)
-  Person.insertMany(docs, function(error, docs) {
+  Person.insertMany(req.body, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
