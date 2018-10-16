@@ -18,6 +18,9 @@ const ProgramSchema = mongoose.Schema({
   name: {
     type: [{}]
   },
+  description: {
+    type: [{}]
+  },
   courses: {
     type: [Schema.Types.ObjectId]
   },
