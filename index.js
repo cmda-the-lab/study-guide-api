@@ -108,44 +108,34 @@ async function getCourses(req, res) {
 //WARNING: Because of the additional indicator lookup, this post route will probably be very slow!
 async function postCourses(req, res) {
   let courses = req.body
-
+  //Convert courses to array if only one course was sent.
   courses = Array.isArray(courses) ? courses : new Array(courses) //TODO: Please tell me there's a nicer way to do this @woooorm
   debug("incoming courses:", courses)
-
-  // let coursesPromiseArray = courses.forEach(async course => {
-  //   let indis = await Indicator.find({ _id: { $in: course.indicators } })
-  //   debug("indis found:", indis)
-  //   let compes = Array.from(new Set(indis.map(indi => indi.competency)) //Create an array of unique competency ids
-  //   debug("compes found:", compes)
-  //   courses.competencies = compes
-
-  //   debug("Course is now:", courses)
-  // })
 
   //For each course in the post, find all it's indicators' competencies then store the relevant competencies
   // In the relevant course
   // The code got a little bit complicated because I needed to use async within a map function
-
   await Promise.all(courses.map(async course =>{
     let indis = await Indicator.find({ _id: { $in: course.indicators } })
     debug("indis found:", indis)
-    let compes = Array.from(new Set(indis.map(indi => indi.competency))) //Create an array of unique competency ids
-    debug("compes found:", compes)
+    let compes = indis.map(indi => String(indi.competency))
+    debug("Compes before unique check:", compes)
+    compes = Array.from(new Set(compes)) //Create an array of unique competency ids
+    debug("compes unique:", compes)
     course.competencies = compes
   }))
-
   debug("Courses are now:", courses)
   
-  // Course.insertMany(courses, function(error, docs) {
-  //   if (error) {
-  //     console.error("Insert into db failed", error)
-  //     res.status(406)
-  //     res.send(error)
-  //   } else {
-  //     res.status(200)
-  //     res.send(docs.length + " docs succesfully inserted into db")
-  //   }
-  // })
+  Course.insertMany(courses, function(error, docs) {
+    if (error) {
+      console.error("Insert into db failed", error)
+      res.status(406)
+      res.send(error)
+    } else {
+      res.status(200)
+      res.send(docs.length + " docs succesfully inserted into db")
+    }
+  })
 }
 
 async function getIndicators(req, res) {
