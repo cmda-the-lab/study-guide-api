@@ -10,7 +10,7 @@ const ProgramSchema = mongoose.Schema({
   },
   degree: {
     type: String,
-    enum: ["Bachelor"]
+    enum: ["bachelor"]
   },
   credits: {
     type: Number
