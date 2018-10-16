@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "nodemon index.js",
-    "pretty": "prettier --no-semi --print-width 180 --write **/*.js",
+    "pretty": "prettier --write **/*.js",
     "dexpress": "DEBUG=express*,API npm start",
     "dbug": "DEBUG=API npm start"
   },
@@ -34,5 +34,9 @@
   "devDependencies": {
     "nodemon": "^1.18.4",
     "prettier": "^1.14.3"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 180
   }
 }
