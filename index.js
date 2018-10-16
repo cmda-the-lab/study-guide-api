@@ -86,6 +86,7 @@ async function getPrograms(req, res) {
 }
 
 function postPrograms(req, res) {
+  debug(req.body)
   Program.insertMany(req.body, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
@@ -103,8 +104,14 @@ async function getCourses(req, res) {
   res.send(result)
 }
 
-function postCourses(req, res) {
-  Course.insertMany(req.body, function(error, docs) {
+async function postCourses(req, res) {
+  const courses = req.body
+  debug(courses)
+  let indi = await Indicator.findOne({"_id": courses.indicators[0]})
+  debug("indi found:", indi)
+  let compe = await Competency.findOne({"_id": indi.competency})
+  debug("compe found:", compe)
+  Course.insertMany(courses, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
