@@ -3,6 +3,7 @@ const express = require("express")
 const { promisify } = require("util")
 const path = require("path")
 const mongoose = require("mongoose")
+const cors = require('cors')
 const bodyParser = require("body-parser")
 const debug = require("debug")("API")
 require("dotenv").config() //Configure .env so all env vars are loaded
@@ -38,6 +39,7 @@ const db = mongoose.connection
 const app = express()
 app
   .use(express.static("static"))
+  .use(cors())  //Needed to allow localhost testing
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
   .get("/faculty", getFaculties)
