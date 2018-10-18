@@ -8,7 +8,6 @@ const Schema = mongoose.Schema
 const CourseSchema = mongoose.Schema({
   id: {
     type: String,
-    required: true
   },
   sisId: {
     type: String

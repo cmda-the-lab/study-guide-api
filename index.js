@@ -68,7 +68,8 @@ async function getFaculties(req, res) {
 }
 
 function postFaculties(req, res) {
-  Faculty.insertMany(req.body, function(error, docs) {
+  let faculties = Array.isArray(req.body) ? req.body : [req.body]
+  Faculty.insertMany(faculties, function(error, docs) {
     if (error) {
       debug("Insert into db failed", error)
       res.status(406)
@@ -86,8 +87,8 @@ async function getPrograms(req, res) {
 }
 
 function postPrograms(req, res) {
-  debug(req.body)
-  Program.insertMany(req.body, function(error, docs) {
+  let programs = Array.isArray(req.body) ? req.body : [req.body]
+  Program.insertMany(programs, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -104,12 +105,10 @@ async function getCourses(req, res) {
   res.send(result)
 }
 
-//TODO: currently only works when posting one course. Will need another map
 //WARNING: Because of the additional indicator lookup, this post route will probably be very slow!
 async function postCourses(req, res) {
-  let courses = req.body
   //Convert courses to array if only one course was sent.
-  courses = Array.isArray(courses) ? courses : new Array(courses) //TODO: Please tell me there's a nicer way to do this @woooorm
+  let courses = Array.isArray(req.body) ? req.body : [req.body] //TODO: Move this to middleware
   debug("incoming courses:", courses)
 
   //For each course in the post, find all it's indicators' competencies then store the relevant competencies
@@ -144,7 +143,8 @@ async function getIndicators(req, res) {
 }
 
 function postIndicators(req, res) {
-  Indicator.insertMany(req.body, function(error, docs) {
+  let indicators = Array.isArray(req.body) ? req.body : [req.body]
+  Indicator.insertMany(indicators, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -162,7 +162,8 @@ async function getCompetencies(req, res) {
 }
 
 function postCompetencies(req, res) {
-  Competency.insertMany(req.body, function(error, docs) {
+  let competencies = Array.isArray(req.body) ? req.body : [req.body]
+  Competency.insertMany(competencies, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -180,7 +181,8 @@ async function getPersons(req, res) {
 }
 
 function postPersons(req, res) {
-  Person.insertMany(req.body, function(error, docs) {
+  let persons = Array.isArray(req.body) ? req.body : [req.body]
+  Person.insertMany(persons, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
