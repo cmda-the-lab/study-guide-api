@@ -61,7 +61,7 @@ app
   .get("/competency", getCompetencies)
   .post("/competency", postCompetencies)
   .get("/competency/:id", getCompetency)
-  .listen(8000)
+  .listen(process.env.PORT || 8000)
 
 //Some async route functions that get data from the db
 async function getFaculties(req, res) {
