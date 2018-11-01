@@ -15,6 +15,9 @@ const CourseSchema = mongoose.Schema({
   name: {
     type: [{}]
   },
+  shortDescription: {
+    type: [{}]
+  },
   description: {
     type: [{}]
   },
