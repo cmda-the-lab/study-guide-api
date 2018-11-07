@@ -48,7 +48,7 @@ app
   .get("/program", getPrograms)
   // .post("/program", postPrograms)
   // .get("/program/:id", getProgram)
-  // .get("/person", getPersons)
+  .get("/person", getPersons)
   // .post("/person", postPersons)
   // .get("/person/:id", getPerson)
   .get("/course", getCourses)
@@ -178,7 +178,7 @@ function postCompetencies(req, res) {
 }
 
 async function getPersons(req, res) {
-  const result = await Person.find()
+  const result = await Person.find().select({ name: 1 });
   res.send(result)
 }
 
