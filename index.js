@@ -116,16 +116,16 @@ async function postCourses(req, res) {
   //For each course in the post, find all it's indicators' competencies then store the relevant competencies
   // In the relevant course
   // The code got a little bit complicated because I needed to use async within a map function
-  await Promise.all(courses.map(async course =>{
-    let indis = await Indicator.find({ _id: { $in: course.indicators } })
-    debug("indis found:", indis)
-    let compes = indis.map(indi => String(indi.competency))
-    debug("Compes before unique check:", compes)
-    compes = Array.from(new Set(compes)) //Create an array of unique competency ids
-    debug("compes unique:", compes)
-    course.competencies = compes
-  }))
-  debug("Courses are now:", courses)
+  // await Promise.all(courses.map(async course =>{
+  //   let indis = await Indicator.find({ _id: { $in: course.indicators } })
+  //   debug("indis found:", indis)
+  //   let compes = indis.map(indi => String(indi.competency))
+  //   debug("Compes before unique check:", compes)
+  //   compes = Array.from(new Set(compes)) //Create an array of unique competency ids
+  //   debug("compes unique:", compes)
+  //   course.competencies = compes
+  // }))
+  // debug("Courses are now:", courses)
   
   Course.insertMany(courses, function(error, docs) {
     if (error) {
