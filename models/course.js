@@ -21,6 +21,9 @@ const CourseSchema = mongoose.Schema({
   description: {
     type: [{}]
   },
+  phase: {
+    type: String
+  },
   years: {
     type: [String]
   },
