@@ -63,6 +63,9 @@ const CourseSchema = mongoose.Schema({
   competencies: {
     type: [Schema.Types.ObjectId]
   },
+  circles: {
+    type: [String]
+  },
   indicators: {
     type: [Schema.Types.ObjectId]
   },
