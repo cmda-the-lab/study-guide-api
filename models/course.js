@@ -60,6 +60,12 @@ const CourseSchema = mongoose.Schema({
   productsAsked: {
     type: [String]
   },
+  researchMethodsLearned: {
+    type: [String]
+  },
+  researchMethodsAsked: {
+    type: [String]
+  },
   coordinators: {
     type: [Schema.Types.ObjectId]
   },
