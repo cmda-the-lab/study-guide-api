@@ -152,7 +152,7 @@ async function postCourses(req, res) {
     })
     return newCourse
   })
-  
+
   Course.insertMany(monCourses, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)

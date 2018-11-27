@@ -54,6 +54,12 @@ const CourseSchema = mongoose.Schema({
   methodsSummary: {
     type: [{}]
   },
+  productsLearned: {
+    type: [String]
+  },
+  productsAsked: {
+    type: [String]
+  },
   coordinators: {
     type: [Schema.Types.ObjectId]
   },
