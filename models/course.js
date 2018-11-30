@@ -82,7 +82,10 @@ const CourseSchema = mongoose.Schema({
     type: [Schema.Types.ObjectId]
   },
   circles: {
-    type: [String]
+    type: String
+  },
+  spaces: {
+    type: String
   },
   indicators: {
     type: [Schema.Types.ObjectId]
