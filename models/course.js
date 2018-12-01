@@ -99,6 +99,12 @@ const CourseSchema = mongoose.Schema({
   assessments: {
     type: [String]
   },
+  studyMaterialsRequired: {
+    type: String
+  },
+  studyMaterialsUsed: {
+    type: String
+  },
   program: {
     type: Schema.Types.ObjectId
   },
