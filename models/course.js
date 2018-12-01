@@ -96,6 +96,9 @@ const CourseSchema = mongoose.Schema({
   objectivesSummary: {
     type: [{}]
   },
+  assessments: {
+    type: [String]
+  },
   program: {
     type: Schema.Types.ObjectId
   },
