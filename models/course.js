@@ -87,6 +87,9 @@ const CourseSchema = mongoose.Schema({
   spaces: {
     type: String
   },
+  level: {
+    type: String
+  },
   indicators: {
     type: [Schema.Types.ObjectId]
   },
