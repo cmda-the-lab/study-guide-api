@@ -1,8 +1,7 @@
 const Faculty = require("./models/faculty")
 const Program = require("./models/program")
-const Course = require("./models/course")
+const Module = require("./models/module")
 const Competency = require("./models/competency")
-const Indicator = require("./models/indicator")
 const Person = require("./models/person")
 //This fails, I think the syntax is wrong for the type defs in the schemas
 // Use this: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose#Book_model
@@ -21,16 +20,14 @@ const testSchemas = {
     db.program = await Program.findOne()
     await this.competency(db)
     db.competencies = await Competency.find()
-    await this.indicator(db)
-    db.indicators = await Indicator.find()
     //Fill it with a person if there isn't one already
     //console.log(db.faculty)
     await this.person()
     db.persons = await Person.find()
     //console.log(db.persons)
-    await this.course(db)
-    db.courses = await Course.find()
-    //console.log(db.courses)
+    await this.module(db)
+    db.modules = await Module.find()
+    //console.log(db.modules)
   },
   async faculty() {
     let faculty = await Faculty.findOne()
@@ -76,10 +73,10 @@ const testSchemas = {
     await cmd.save()
     return
   },
-  async course(db) {
-    let course = await Course.findOne()
-    if (course) return course
-    const designEthics = new Course({
+  async module(db) {
+    let module = await Module.findOne()
+    if (module) return module
+    const designEthics = new Module({
       id: "257651",
       name: [
         {
@@ -100,17 +97,16 @@ const testSchemas = {
       teachersSummary: "awesometeachers",
       competencies: db.competencies,
       competenciesSummary: "research",
-      indicators: db.indicators[0],
       objectivesSummary: "Objective! Over ruled!",
       program: db.program,
       faculty: db.faculty
     })
     //console.log(designEthics.coordinators)
-    await designEthics.save(function(err, course) {
+    await designEthics.save(function(err, module) {
       if (err) return console.error(err)
-      return course
+      return module
     })
-    console.log("New Course created with desc:", designEthics.description)
+    console.log("New Module created with desc:", designEthics.description)
     return
   },
   async competency(db) {
@@ -130,34 +126,10 @@ const testSchemas = {
         }
       ],
       description: "",
-      indicators: [],
       programs: db.program
     })
     console.log("New competency created with id:", evalueren.id)
     await evalueren.save()
-    return
-  },
-  async indicator(db) {
-    let indicator = await Indicator.findOne()
-    if (indicator) return indicator
-    const fourA = new Indicator({
-      id: "4a",
-      name: [
-        {
-          language: "nl",
-          value: "Een CMD’er is kritisch op het eigen werk met als doel dit te verbeteren en zoekt actief naar feedback."
-        },
-        {
-          language: "en",
-          value: "A CMD’er is self-critical to be able to improve their work and actively look for feedback."
-        }
-      ],
-      description: "Een CMD’er is kritisch op het eigen werk met als doel dit te verbeteren en zoekt actief naar feedback.",
-      competency: db.competencies[0],
-      program: db.program
-    })
-    console.log("New indicator created with id:", fourA.id)
-    await fourA.save()
     return
   },
   async person() {

@@ -21,7 +21,7 @@ const ProgramSchema = mongoose.Schema({
   description: {
     type: [{}]
   },
-  courses: {
+  modules: {
     type: [Schema.Types.ObjectId]
   },
   competencies: {

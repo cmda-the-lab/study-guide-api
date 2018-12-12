@@ -12,7 +12,7 @@ const ClusterSchema = mongoose.Schema({
     type: [{}]
   },
   phase: {
-    type: String
+    type: [{ type: String, enum: ["foundation", "profiling", "minor", "graduation"] }]
   },
   languages: {
     type: [{ type: String, enum: ["en", "nl"] }]
@@ -20,7 +20,7 @@ const ClusterSchema = mongoose.Schema({
   coordinators: {
     type: [Schema.Types.ObjectId]
   },
-  courses: {
+  modules: {
     type: [Schema.Types.ObjectId]
   }
 })
