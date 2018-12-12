@@ -18,10 +18,10 @@ const ModuleSchema = mongoose.Schema({
     type: [{}]
   },
   type: {
-    type: String
+    type: { type: String, enum: ["course", "project"] }
   },
   phase: {
-    type: String
+    type: [{ type: String, enum: ["foundation", "profiling", "minor", "graduation"] }]
   },
   years: {
     type: [String]
