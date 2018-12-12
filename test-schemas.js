@@ -2,7 +2,6 @@ const Faculty = require("./models/faculty")
 const Program = require("./models/program")
 const Course = require("./models/course")
 const Competency = require("./models/competency")
-const Indicator = require("./models/indicator")
 const Person = require("./models/person")
 //This fails, I think the syntax is wrong for the type defs in the schemas
 // Use this: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose#Book_model
@@ -21,8 +20,6 @@ const testSchemas = {
     db.program = await Program.findOne()
     await this.competency(db)
     db.competencies = await Competency.find()
-    await this.indicator(db)
-    db.indicators = await Indicator.find()
     //Fill it with a person if there isn't one already
     //console.log(db.faculty)
     await this.person()
@@ -100,7 +97,6 @@ const testSchemas = {
       teachersSummary: "awesometeachers",
       competencies: db.competencies,
       competenciesSummary: "research",
-      indicators: db.indicators[0],
       objectivesSummary: "Objective! Over ruled!",
       program: db.program,
       faculty: db.faculty
@@ -130,34 +126,10 @@ const testSchemas = {
         }
       ],
       description: "",
-      indicators: [],
       programs: db.program
     })
     console.log("New competency created with id:", evalueren.id)
     await evalueren.save()
-    return
-  },
-  async indicator(db) {
-    let indicator = await Indicator.findOne()
-    if (indicator) return indicator
-    const fourA = new Indicator({
-      id: "4a",
-      name: [
-        {
-          language: "nl",
-          value: "Een CMD’er is kritisch op het eigen werk met als doel dit te verbeteren en zoekt actief naar feedback."
-        },
-        {
-          language: "en",
-          value: "A CMD’er is self-critical to be able to improve their work and actively look for feedback."
-        }
-      ],
-      description: "Een CMD’er is kritisch op het eigen werk met als doel dit te verbeteren en zoekt actief naar feedback.",
-      competency: db.competencies[0],
-      program: db.program
-    })
-    console.log("New indicator created with id:", fourA.id)
-    await fourA.save()
     return
   },
   async person() {

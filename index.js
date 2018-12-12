@@ -15,7 +15,6 @@ const Program = require("./models/program")
 const Cluster = require("./models/cluster")
 const Course = require("./models/course")
 const Competency = require("./models/competency")
-const Indicator = require("./models/indicator")
 const Person = require("./models/person")
 const testSchemas = require("./test-schemas")
 
@@ -58,9 +57,6 @@ app
   .post("/course", postCourses)
   .get("/course/:id", getCourse)
   // .get("/course/:id/teachers", getCourseTeachers)
-  .get("/indicator", getIndicators)
-  // .post("/indicator", postIndicators)
-  // .get("/indicator/:id", getIndicator)
   .get("/competency", getCompetencies)
   // .post("/competency", postCompetencies)
   // .get("/competency/:id", getCompetency)
@@ -131,7 +127,6 @@ async function getCourses(req, res) {
   res.send(result)
 }
 
-//WARNING: Because of the additional indicator lookup, this post route will probably be very slow!
 async function postCourses(req, res) {
   //Convert courses to array if only one course was sent.
   let newCourses = Array.isArray(req.body) ? req.body : [req.body] //TODO: Move this to middleware
@@ -154,25 +149,6 @@ async function postCourses(req, res) {
   })
 
   Course.insertMany(monCourses, function(error, docs) {
-    if (error) {
-      console.error("Insert into db failed", error)
-      res.status(406)
-      res.send(error)
-    } else {
-      res.status(200)
-      res.send(docs.length + " docs succesfully inserted into db")
-    }
-  })
-}
-
-async function getIndicators(req, res) {
-  const result = await Indicator.find()
-  res.send(result)
-}
-
-function postIndicators(req, res) {
-  let indicators = Array.isArray(req.body) ? req.body : [req.body]
-  Indicator.insertMany(indicators, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -263,16 +239,6 @@ async function getPerson(req, res) {
 
   console.log("someone requested /Person:id", _id)
   const result = await Person.find({
-    _id
-  })
-  res.send(result)
-}
-
-async function getIndicator(req, res) {
-  let _id = req.params.id
-
-  console.log("someone requested /Indicator:id", _id)
-  const result = await Indicator.find({
     _id
   })
   res.send(result)
