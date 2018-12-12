@@ -15,8 +15,17 @@ const CourseSchema = mongoose.Schema({
   name: {
     type: [{}]
   },
+  shortDescription: {
+    type: [{}]
+  },
   description: {
     type: [{}]
+  },
+  type: {
+    type: String
+  },
+  phase: {
+    type: String
   },
   years: {
     type: [String]
@@ -45,6 +54,18 @@ const CourseSchema = mongoose.Schema({
   methodsSummary: {
     type: [{}]
   },
+  productsLearned: {
+    type: [String]
+  },
+  productsAsked: {
+    type: [String]
+  },
+  researchMethodsLearned: {
+    type: [String]
+  },
+  researchMethodsAsked: {
+    type: [String]
+  },
   coordinators: {
     type: [Schema.Types.ObjectId]
   },
@@ -60,6 +81,15 @@ const CourseSchema = mongoose.Schema({
   competencies: {
     type: [Schema.Types.ObjectId]
   },
+  circles: {
+    type: String
+  },
+  spaces: {
+    type: String
+  },
+  level: {
+    type: String
+  },
   indicators: {
     type: [Schema.Types.ObjectId]
   },
@@ -68,6 +98,15 @@ const CourseSchema = mongoose.Schema({
   },
   objectivesSummary: {
     type: [{}]
+  },
+  assessments: {
+    type: [String]
+  },
+  studyMaterialsRequired: {
+    type: String
+  },
+  studyMaterialsUsed: {
+    type: String
   },
   program: {
     type: Schema.Types.ObjectId

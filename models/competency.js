@@ -11,6 +11,9 @@ const CompetencySchema = mongoose.Schema({
   value: {
     type: String
   },
+  description: {
+  	type: [{}]
+  },
   programs: {
     type: [Schema.Types.ObjectId]
   }

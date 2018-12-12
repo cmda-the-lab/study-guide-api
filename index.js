@@ -12,6 +12,7 @@ mongoose.set("debug", Boolean(process.env.DEBUG))
 
 const Faculty = require("./models/faculty")
 const Program = require("./models/program")
+const Cluster = require("./models/cluster")
 const Course = require("./models/course")
 const Competency = require("./models/competency")
 const Indicator = require("./models/indicator")
@@ -43,24 +44,26 @@ app
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
   .get("/faculty", getFaculties)
-  .post("/faculty", postFaculties)
-  .get("/faculty/:id", getFaculty)
+  // .post("/faculty", postFaculties)
+  // .get("/faculty/:id", getFaculty)
   .get("/program", getPrograms)
-  .post("/program", postPrograms)
-  .get("/program/:id", getProgram)
+  // .post("/program", postPrograms)
+  // .get("/program/:id", getProgram)
   .get("/person", getPersons)
-  .post("/person", postPersons)
-  .get("/person/:id", getPerson)
+  // .post("/person", postPersons)
+  // .get("/person/:id", getPerson)
+  .get("/cluster", getClusters)
+  .post("/cluster", postClusters)
   .get("/course", getCourses)
   .post("/course", postCourses)
   .get("/course/:id", getCourse)
-  .get("/course/:id/teachers", getCourseTeachers)
+  // .get("/course/:id/teachers", getCourseTeachers)
   .get("/indicator", getIndicators)
-  .post("/indicator", postIndicators)
-  .get("/indicator/:id", getIndicator)
+  // .post("/indicator", postIndicators)
+  // .get("/indicator/:id", getIndicator)
   .get("/competency", getCompetencies)
-  .post("/competency", postCompetencies)
-  .get("/competency/:id", getCompetency)
+  // .post("/competency", postCompetencies)
+  // .get("/competency/:id", getCompetency)
   .listen(process.env.PORT || 8000)
 
 //Some async route functions that get data from the db
@@ -102,6 +105,27 @@ function postPrograms(req, res) {
   })
 }
 
+async function getClusters(req, res) {
+  const result = await Cluster.find()
+  res.send(result)
+}
+
+async function postClusters(req, res) {
+  //Convert courses to array if only one course was sent.
+  let clusters = Array.isArray(req.body) ? req.body : [req.body] //TODO: Move this to middleware
+  debug("incoming Clusters:", clusters)
+  Cluster.insertMany(clusters, function(error, docs) {
+    if (error) {
+      console.error("Insert into db failed", error)
+      res.status(406)
+      res.send(error)
+    } else {
+      res.status(200)
+      res.send(docs.length + " docs succesfully inserted into db")
+    }
+  })
+}
+
 async function getCourses(req, res) {
   const result = await Course.find()
   res.send(result)
@@ -110,24 +134,26 @@ async function getCourses(req, res) {
 //WARNING: Because of the additional indicator lookup, this post route will probably be very slow!
 async function postCourses(req, res) {
   //Convert courses to array if only one course was sent.
-  let courses = Array.isArray(req.body) ? req.body : [req.body] //TODO: Move this to middleware
-  debug("incoming courses:", courses)
+  let newCourses = Array.isArray(req.body) ? req.body : [req.body] //TODO: Move this to middleware
+  debug("incoming courses:", newCourses)
 
-  //For each course in the post, find all it's indicators' competencies then store the relevant competencies
-  // In the relevant course
-  // The code got a little bit complicated because I needed to use async within a map function
-  await Promise.all(courses.map(async course =>{
-    let indis = await Indicator.find({ _id: { $in: course.indicators } })
-    debug("indis found:", indis)
-    let compes = indis.map(indi => String(indi.competency))
-    debug("Compes before unique check:", compes)
-    compes = Array.from(new Set(compes)) //Create an array of unique competency ids
-    debug("compes unique:", compes)
-    course.competencies = compes
-  }))
-  debug("Courses are now:", courses)
-  
-  Course.insertMany(courses, function(error, docs) {
+  const monCourses = newCourses.map(course => {
+    const newCourse = new Course(course)
+    debug(course.cluster)
+    course.cluster.forEach(clusterId => {
+      Cluster.update(
+        { _id:clusterId}, 
+        { $push: { courses: newCourse._id } },
+        function(error,docs){
+          if(error) {
+            console.log(error)
+          }
+      })
+    })
+    return newCourse
+  })
+
+  Course.insertMany(monCourses, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -178,7 +204,7 @@ function postCompetencies(req, res) {
 }
 
 async function getPersons(req, res) {
-  const result = await Person.find()
+  const result = await Person.find().select({ name: 1 });
   res.send(result)
 }
 
@@ -209,6 +235,15 @@ async function getProgram(req, res) {
   let id = req.params.id
   console.log("someone requested /program:id", id)
   const result = await Program.find({
+    id
+  })
+  res.send(result)
+}
+
+async function getCluster(req, res) {
+  let id = req.params.id
+  console.log("someone requested /Cluster:id", id)
+  const result = await Cluster.find({
     id
   })
   res.send(result)
