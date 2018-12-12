@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
-const CourseSchema = mongoose.Schema({
+const ModuleSchema = mongoose.Schema({
   id: {
     type: String,
   },
@@ -108,4 +108,4 @@ const CourseSchema = mongoose.Schema({
     type: Schema.Types.ObjectId
   }
 })
-const Course = (module.exports = mongoose.model("Course", CourseSchema))
+const Module = (module.exports = mongoose.model("Module", ModuleSchema))

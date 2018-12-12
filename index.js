@@ -13,7 +13,7 @@ mongoose.set("debug", Boolean(process.env.DEBUG))
 const Faculty = require("./models/faculty")
 const Program = require("./models/program")
 const Cluster = require("./models/cluster")
-const Course = require("./models/course")
+const Module = require("./models/module")
 const Competency = require("./models/competency")
 const Person = require("./models/person")
 const testSchemas = require("./test-schemas")
@@ -53,10 +53,10 @@ app
   // .get("/person/:id", getPerson)
   .get("/cluster", getClusters)
   .post("/cluster", postClusters)
-  .get("/course", getCourses)
-  .post("/course", postCourses)
-  .get("/course/:id", getCourse)
-  // .get("/course/:id/teachers", getCourseTeachers)
+  .get("/module", getModules)
+  .post("/module", postModules)
+  .get("/module/:id", getModule)
+  // .get("/module/:id/teachers", getModuleTeachers)
   .get("/competency", getCompetencies)
   // .post("/competency", postCompetencies)
   // .get("/competency/:id", getCompetency)
@@ -107,7 +107,7 @@ async function getClusters(req, res) {
 }
 
 async function postClusters(req, res) {
-  //Convert courses to array if only one course was sent.
+  //Convert to array if only one object was sent.
   let clusters = Array.isArray(req.body) ? req.body : [req.body] //TODO: Move this to middleware
   debug("incoming Clusters:", clusters)
   Cluster.insertMany(clusters, function(error, docs) {
@@ -122,33 +122,33 @@ async function postClusters(req, res) {
   })
 }
 
-async function getCourses(req, res) {
-  const result = await Course.find()
+async function getModules(req, res) {
+  const result = await Module.find()
   res.send(result)
 }
 
-async function postCourses(req, res) {
-  //Convert courses to array if only one course was sent.
-  let newCourses = Array.isArray(req.body) ? req.body : [req.body] //TODO: Move this to middleware
-  debug("incoming courses:", newCourses)
+async function postModules(req, res) {
+  //Convert modules to array if only one module was sent.
+  let newModules = Array.isArray(req.body) ? req.body : [req.body] //TODO: Move this to middleware
+  debug("incoming modules:", newModules)
 
-  const monCourses = newCourses.map(course => {
-    const newCourse = new Course(course)
-    debug(course.cluster)
-    course.cluster.forEach(clusterId => {
+  const monModules = newModules.map(module => {
+    const newModule = new Module(module)
+    debug(module.cluster)
+    module.cluster.forEach(clusterId => {
       Cluster.update(
         { _id:clusterId}, 
-        { $push: { courses: newCourse._id } },
+        { $push: { modules: newModule._id } },
         function(error,docs){
           if(error) {
             console.log(error)
           }
       })
     })
-    return newCourse
+    return newModule
   })
 
-  Course.insertMany(monCourses, function(error, docs) {
+  Module.insertMany(monModules, function(error, docs) {
     if (error) {
       console.error("Insert into db failed", error)
       res.status(406)
@@ -225,10 +225,10 @@ async function getCluster(req, res) {
   res.send(result)
 }
 
-async function getCourse(req, res) {
+async function getModule(req, res) {
   let id = req.params.id
-  console.log("someone requested /Course:id", id)
-  const result = await Course.find({
+  console.log("someone requested /Module:id", id)
+  const result = await Module.find({
     id
   })
   res.send(result)
@@ -254,14 +254,14 @@ async function getCompetency(req, res) {
   res.send(result)
 }
 
-async function getCourseTeachers(req, res) {
+async function getModuleTeachers(req, res) {
   let id = req.params.id
-  console.log("someone requested /Course:id/teachers", id)
-  const course = await Course.findOne({
+  console.log("someone requested /Module:id/teachers", id)
+  const module = await Module.findOne({
     id
   })
-  console.log("teachers for this course: ", course.teachers)
-  const teacherIds = course.teachers.map(teacher => mongoose.Types.ObjectId(teacher))
+  console.log("teachers for this module: ", module.teachers)
+  const teacherIds = module.teachers.map(teacher => mongoose.Types.ObjectId(teacher))
   console.log(teacherIds)
   const result = await Person.find({ _id: { $in: teacherIds } })
   res.send(result)

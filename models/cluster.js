@@ -20,7 +20,7 @@ const ClusterSchema = mongoose.Schema({
   coordinators: {
     type: [Schema.Types.ObjectId]
   },
-  courses: {
+  modules: {
     type: [Schema.Types.ObjectId]
   }
 })
