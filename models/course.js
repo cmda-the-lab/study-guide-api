@@ -102,6 +102,9 @@ const CourseSchema = mongoose.Schema({
   assessments: {
     type: [String]
   },
+  assessmentsSummary: {
+    type: [{}]
+  },
   studyMaterialsRequired: {
     type: String
   },
